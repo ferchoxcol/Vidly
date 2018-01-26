@@ -1,0 +1,31 @@
+﻿@using System.Web.Services.Protocols
+@using Vidly.Models
+@model Vidly.Models.Movie
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Movies</h2>
+@if (Model != null)
+{
+    <h3>
+        @Model.Name
+    </h3>
+    <ul>
+        
+        <li>
+            Genre: @Model.Genre.Name
+        </li>
+        <li>
+            Release Date:@Model.ReleaseDate
+        </li>
+        <li>
+            Date Added: @Model.DateAdded
+        </li>
+        <li>
+            Number in stock:@Model.NumberInStock
+        </li>
+    </ul>
+}
+
+
