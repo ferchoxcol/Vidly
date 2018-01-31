@@ -50,6 +50,10 @@ namespace Vidly.Controllers
                 new Customer {Id = '2', Name = "Sandra Pineda"}
             };
         }
+        public ActionResult New()
+        {
+            return View();
+        }
     }
 
 
