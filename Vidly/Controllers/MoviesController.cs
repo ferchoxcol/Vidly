@@ -61,13 +61,24 @@ namespace Vidly.Controllers
 
         public ActionResult Edit(int id)
         {
-            return Content("Id=" + id);
+            var movie = _context.Movies.Single(m => m.Id == id);
+            if (movie == null)
+                return HttpNotFound();
+
+            var viewModel = new MovieFormViewModel
+            {
+                Genres = _context.Genres.ToList(),
+                Movie = movie
+
+            };
+
+            return View("MovieForm",viewModel);
         }
 
         public ActionResult Index()
         {
-
-            return View(_context.Movies.Include(m => m.Genre).ToList());
+            var lista = _context.Movies.Include(m => m.Genre).ToList();
+            return View(lista);
 
         }
 
@@ -98,5 +109,58 @@ namespace Vidly.Controllers
 
             return View(_context.Movies.Include(m => m.Genre).SingleOrDefault(m => m.Id == id));
         }
+
+        public ActionResult New()
+        {
+            var viewModel = new MovieFormViewModel
+            {
+                Genres = _context.Genres
+               
+            };
+
+            return View("MovieForm",viewModel);
+        }
+        [HttpPost]
+        public ActionResult Save( Movie movie)
+        {
+            if (movie.Id == 0)
+            {
+                movie.DateAdded= DateTime.Now;
+                _context.Movies.Add(movie);
+
+            }
+            else
+            {
+                var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
+                movieInDb.GenreId = movie.GenreId;
+                movieInDb.Name = movie.Name;
+                movieInDb.NumberInStock = movie.NumberInStock;
+                movieInDb.ReleaseDate = movie.ReleaseDate;
+
+            }
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (System.Data.Entity.Validation.DbEntityValidationException dbEx)
+            {
+                Exception raise = dbEx;
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        string message = string.Format("{0}:{1}",
+                            validationErrors.Entry.Entity.ToString(),
+                            validationError.ErrorMessage);
+                        // raise a new exception nesting
+                        // the current instance as InnerException
+                        raise = new InvalidOperationException(message, raise);
+                    }
+                }
+                throw raise;
+            }
+            return RedirectToAction("Index","Movies");
+        }
+
     }
 }

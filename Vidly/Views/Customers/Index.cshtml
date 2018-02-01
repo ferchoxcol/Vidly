@@ -8,29 +8,32 @@
 
 <h2>Customers</h2>
 
+<p>
+    @Html.ActionLink("NEW CUSTOMER", "New", "Customers", new { @class = "btn btn-primary" })
+</p>
 @if (Model.Any())
 {
     <table Class="table table-bordered table-hover">
         <thead>
-        <tr>
-            <th>
-                Customers
-            </th>
-            <th>
-                MembershipType
-            </th>
-        </tr>
+            <tr>
+                <th>
+                    Customers
+                </th>
+                <th>
+                    MembershipType
+                </th>
+            </tr>
         </thead>
         <tbody>
 
-        @foreach (Customer cliente in Model)
-        {
-            <tr>
+            @foreach (Customer cliente in Model)
+            {
+                <tr>
 
-                <td>@Html.ActionLink(cliente.Name, "Edit", "Customers", new {id = cliente.Id}, null)</td>
-                <td>@cliente.MembershipType.Name</td>
-            </tr>
-        }
+                    <td>@Html.ActionLink(cliente.Name, "Edit", "Customers", new { id = cliente.Id }, null)</td>
+                    <td>@cliente.MembershipType.Name</td>
+                </tr>
+            }
         </tbody>
     </table>
 }
@@ -41,4 +44,3 @@ else
     <p>We don't have any customer yet!</p>
 }
 
-        

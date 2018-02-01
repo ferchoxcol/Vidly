@@ -1,4 +1,5 @@
-﻿@using Vidly.Models
+﻿@using Vidly.Controllers
+@using Vidly.Models
 @model IEnumerable<Movie>
 @{
     ViewBag.Title = "Movies";
@@ -6,25 +7,36 @@
 }
 
 <h2>Movies</h2>
-
-<table Class="table table-bordered table-hover">
-    <thead>
-    <tr>
-        <th>Movie</th>
-        <th>Genre</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (Movie movie in Model)
-    {
+<p>
+    
+@Html.ActionLink("NEW MOVIE", "New", "Movies",null, new { @class="btn btn-primary"}) 
+</p>
+@if (Model.Any())
+{
+    <table Class="table table-bordered table-hover">
+        <thead>
         <tr>
-            <td>
-              @Html.ActionLink(movie.Name,"Details","Movies",new {id= movie.Id},null)  
-            </td>
-            <td>
-                @movie.Genre.Name
-            </td>
+            <th>Movie</th>
+            <th>Genre</th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (Movie movie in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(movie.Name, "Edit", "Movies", new {id = movie.Id}, null)
+                </td>
+                <td>
+                    @movie.Genre.Name
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Not Movies Added yet!</p>
+
+}
