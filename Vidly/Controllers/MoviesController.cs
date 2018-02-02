@@ -18,7 +18,7 @@ namespace Vidly.Controllers
 
         public MoviesController()
         {
-            _context=new ApplicationDbContext();
+            _context = new ApplicationDbContext();
         }
 
         protected override void Dispose(bool disposing)
@@ -29,7 +29,7 @@ namespace Vidly.Controllers
         // GET: Movies
         public ActionResult Random()
         {
-            var movie = new Movie() {Name="Shrek!"};
+            var movie = new Movie() { Name = "Shrek!" };
 
             var viewResult = new ViewResult();
 
@@ -50,7 +50,7 @@ namespace Vidly.Controllers
 
 
 
-            
+
             return View(viewModel);
             //return View(movie);
             //return Content("Hello World!!");
@@ -72,7 +72,7 @@ namespace Vidly.Controllers
 
             };
 
-            return View("MovieForm",viewModel);
+            return View("MovieForm", viewModel);
         }
 
         public ActionResult Index()
@@ -82,7 +82,7 @@ namespace Vidly.Controllers
 
         }
 
-        
+
         //public ActionResult Index (int? pageIndex, String sortBy)
         //{
 
@@ -101,7 +101,7 @@ namespace Vidly.Controllers
         [Route("Movies/released/{year:regex(\\d{4})}/{month:regex(\\d{2}):range(1,12)}")]
         public ActionResult ByReleasedYear(int year, int month)
         {
-            return Content(year +"/"+month);
+            return Content(year + "/" + month);
         }
 
         public ActionResult Details(int id)
@@ -114,21 +114,37 @@ namespace Vidly.Controllers
         {
             var viewModel = new MovieFormViewModel
             {
-                Genres = _context.Genres
-               
+                Genres = _context.Genres,
+                Movie = new Movie()
+
             };
 
-            return View("MovieForm",viewModel);
+            return View("MovieForm", viewModel);
         }
         [HttpPost]
-        public ActionResult Save( Movie movie)
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(Movie movie)
         {
-            if (movie.Id == 0)
+            if (!ModelState.IsValid)
             {
-                movie.DateAdded= DateTime.Now;
-                _context.Movies.Add(movie);
+                var viewModel = new MovieFormViewModel
+                {
+                    Genres = _context.Genres.ToList(),
+                    Movie = movie
+                };
 
+                return View("MovieForm", viewModel);
             }
+            if (movie.Id == 0)
+                {
+                    movie.DateAdded = DateTime.Now;
+                    _context.Movies.Add(movie);
+
+                }
+
+          
+
+
             else
             {
                 var movieInDb = _context.Movies.Single(m => m.Id == movie.Id);
@@ -159,7 +175,7 @@ namespace Vidly.Controllers
                 }
                 throw raise;
             }
-            return RedirectToAction("Index","Movies");
+            return RedirectToAction("Index", "Movies");
         }
 
     }
