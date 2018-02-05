@@ -74,7 +74,7 @@ namespace Vidly.Controllers.Api
             _context.SaveChanges();
 
         }
-
+        [HttpDelete]
         public void DeleteCustomer(int id)
         {
             var CustomerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);

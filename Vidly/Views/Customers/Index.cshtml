@@ -13,7 +13,7 @@
 </p>
 @if (Model.Any())
 {
-    <table Class="table table-bordered table-hover">
+    <table Id="Customers" Class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>
@@ -21,6 +21,9 @@
                 </th>
                 <th>
                     MembershipType
+                </th>
+                <th>
+                    Delete
                 </th>
             </tr>
         </thead>
@@ -32,6 +35,9 @@
 
                     <td>@Html.ActionLink(cliente.Name, "Edit", "Customers", new { id = cliente.Id }, null)</td>
                     <td>@cliente.MembershipType.Name</td>
+                    <td>
+                        <button data-customer-id="@cliente.Id" class="btn-link js-delete">Delete</button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -44,3 +50,35 @@ else
     <p>We don't have any customer yet!</p>
 }
 
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#Customers").dataTable();
+
+            $("#Customers").on("click",".js-delete",
+
+                function () {
+                    var button = $(this);
+
+                    bootbox.confirm("Are you sure to Delete this customer?",
+                        function (result) {
+                            if(result){
+                            $.ajax({
+                                url: "/api/customers/" + button.attr("data-customer-id"),
+                                method: "DELETE",
+                                success: function () {
+                                    button.parents("tr").remove();
+                                }
+                            });
+                            }
+                        });
+                    
+                       
+
+                    
+                });
+        });
+    </script>
+}
