@@ -11,8 +11,7 @@
 
     @Html.ActionLink("NEW MOVIE", "New", "Movies", null, new { @class = "btn btn-primary" })
 </p>
-@if (Model.Any())
-{
+
     <table id="movies" Class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -25,12 +24,7 @@
            
         </tbody>
     </table>
-}
-else
-{
-    <p>Not Movies Added yet!</p>
 
-}
 @section scripts
 {
     <script>

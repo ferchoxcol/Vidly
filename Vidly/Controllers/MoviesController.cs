@@ -21,6 +21,15 @@ namespace Vidly.Controllers
             _context = new ApplicationDbContext();
         }
 
+        public ViewResult Index()
+        {
+            if (User.IsInRole("CanManageMovie"))
+                return View("List");
+         else
+                return View("ReadOnlyList");
+        }
+
+    
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();
@@ -74,12 +83,12 @@ namespace Vidly.Controllers
             return View("MovieForm", viewModel);
         }
 
-        public ActionResult Index()
-        {
-            var lista = _context.Movies.Include(m => m.Genre).ToList();
-            return View(lista);
+        //public ActionResult Index()
+        //{
+        //    var lista = _context.Movies.Include(m => m.Genre).ToList();
+        //    return View(lista);
 
-        }
+        //}
 
 
         //public ActionResult Index (int? pageIndex, String sortBy)
@@ -109,7 +118,8 @@ namespace Vidly.Controllers
             return View(_context.Movies.Include(m => m.Genre).SingleOrDefault(m => m.Id == id));
         }
 
-        public ActionResult New()
+        [Authorize(Roles = RoleName.CanManageMovies)]
+        public ViewResult New()
         {
             var viewModel = new MovieFormViewModel
             {
