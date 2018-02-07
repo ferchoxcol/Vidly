@@ -18,6 +18,8 @@ namespace Vidly.Dtos
 
         public byte GenreId { get; set; }
 
+        public GenreDto Genre { get; set; }
+
         [Required]
 
         public DateTime ReleaseDate { get; set; }

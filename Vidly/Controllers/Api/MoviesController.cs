@@ -29,7 +29,7 @@ namespace Vidly.Controllers.Api
         //Get /api/Movies/
         public IEnumerable<Movie> GetMovies()
         {
-            return _context.Movies.ToList();
+            return _context.Movies.Include(m => m.Genre).ToList();
         }
 
         //Get by id /api/Movies/id
