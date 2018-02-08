@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Vidly.Models;
 
+
 namespace Vidly.Controllers
 {
     [Authorize]
@@ -156,10 +157,10 @@ namespace Vidly.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                   // var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
-                   // var roleManager = new RoleManager<IdentityRole>(roleStore);
-                   //await roleManager.CreateAsync(new IdentityRole("CanManageMovie"));
-                   // await UserManager.AddToRoleAsync(user.Id, "CanManageMovies");
+                    var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    await roleManager.CreateAsync(new IdentityRole("CanManageCustomer"));
+                    await UserManager.AddToRoleAsync(user.Id, "CanManageCustomer");
 
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     

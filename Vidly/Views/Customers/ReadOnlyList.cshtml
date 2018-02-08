@@ -1,0 +1,52 @@
+﻿@using Vidly.Models
+@model  IEnumerable<Customer>
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Customers</h2>
+
+<p>
+</p>
+<table Id="customers" Class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                Customers
+            </th>
+            <th>
+                MembershipType
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+          var table=  $("#customers").DataTable({
+                ajax: {
+                    url: "/api/customers",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",
+                     
+                    },
+                    {
+                        data: "membershipType.name"
+                    }
+                ]
+            });
+
+          
+        });
+    </script>
+}
